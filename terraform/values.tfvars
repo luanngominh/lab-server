@@ -1,5 +1,7 @@
 # Dynamo locking table
 dynamo_table = "splunk-state"
+bucket = "splunk-state"
+
 # Instance configuration
 region = "ap-southeast-1"
 instance_type = "t2.medium"
