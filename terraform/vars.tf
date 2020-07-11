@@ -29,6 +29,16 @@ variable "aws_secret_access_key" {
   description = "AWS secret key"
 }
 
+variable "disk_size" {
+  type = string
+  description = "Instance disk size"
+}
+
+variable "ssh_private_key" {
+  type = string
+  description = "Ssh private key"
+}
+
 variable "bucket" {
   type = string
   description = "State bucket is used to save terraform state"
