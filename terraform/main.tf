@@ -6,21 +6,21 @@ provider "aws" {
 
 
 # Create PVC
-resource "aws_vpc" "splunk" {
+resource "aws_vpc" "host" {
   cidr_block       = "172.16.0.0/16"
   instance_tenancy = "default"
 
   tags = {
-    Name = "splunk"
+    Name = "host"
   }
 }
 
-resource "aws_subnet" "splunk_public" {
-  vpc_id = "${aws_vpc.splunk.id}"
+resource "aws_subnet" "host_public" {
+  vpc_id = "${aws_vpc.host.id}"
   cidr_block = "172.16.13.0/24"
 
   tags = {
-    Name = "splunk_public"
+    Name = "host_public"
   }
 
   lifecycle {
@@ -28,43 +28,43 @@ resource "aws_subnet" "splunk_public" {
   }
 }
 
-resource "aws_internet_gateway" "splunk_igw" {
-  vpc_id = "${aws_vpc.splunk.id}"
+resource "aws_internet_gateway" "host_igw" {
+  vpc_id = "${aws_vpc.host.id}"
 
   tags = {
-    Name = "splunk_igw"
+    Name = "host_igw"
   }
 }
 
-resource "aws_route_table" "splunk_public_route" {
-  vpc_id = "${aws_vpc.splunk.id}"
+resource "aws_route_table" "host_public_route" {
+  vpc_id = "${aws_vpc.host.id}"
 
   route {
     cidr_block        = "0.0.0.0/0"
-    gateway_id = "${aws_internet_gateway.splunk_igw.id}"
+    gateway_id = "${aws_internet_gateway.host_igw.id}"
   }
 
   tags = {
-    Name = "splunk_public_route"
+    Name = "host_public_route"
   }
 }
 
 resource "aws_route_table_association" "route_public_subnet_associate" {
-  subnet_id = "${aws_subnet.splunk_public.id}"
-  route_table_id = "${aws_route_table.splunk_public_route.id}"
+  subnet_id = "${aws_subnet.host_public.id}"
+  route_table_id = "${aws_route_table.host_public_route.id}"
 }
 
-resource "aws_security_group" "splunk_sg" {
-  name        = "splunk_sg"
-  description = "Splunk security group"
-  vpc_id      = "${aws_vpc.splunk.id}"
+resource "aws_security_group" "host_sg" {
+  name        = "host_sg"
+  description = "Host security group"
+  vpc_id      = "${aws_vpc.host.id}"
 
   ingress {
     description = "All traffic in the same VPC"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = [aws_vpc.splunk.cidr_block]
+    cidr_blocks = [aws_vpc.host.cidr_block]
   }
 
   ingress {
@@ -83,7 +83,7 @@ resource "aws_security_group" "splunk_sg" {
   }
 
   tags = {
-    Name = "slunk_sg"
+    Name = "host_sg"
   }
 }
 

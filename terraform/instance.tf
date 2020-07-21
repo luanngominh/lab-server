@@ -1,16 +1,16 @@
-resource "aws_key_pair" "splunk_key_pair" {
-  key_name   = "splunk_key_pair"
+resource "aws_key_pair" "host_key_pair" {
+  key_name   = "host_key_pair"
   public_key = file("bootstrap/id_rsa.pub")
 }
 
-resource "aws_instance" "splunk" {
+resource "aws_instance" "host" {
   count = "${var.number_of_instance}"
   ami           = "${var.instance_ami}"
   instance_type = "${var.instance_type}"
 
-  key_name = "${aws_key_pair.splunk_key_pair.key_name}"
-  vpc_security_group_ids = ["${aws_security_group.splunk_sg.id}"]
-  subnet_id = "${aws_subnet.splunk_public.id}"
+  key_name = "${aws_key_pair.host_key_pair.key_name}"
+  vpc_security_group_ids = ["${aws_security_group.host_sg.id}"]
+  subnet_id = "${aws_subnet.host_public.id}"
   private_ip = "172.16.13.5${count.index + 1}"
   associate_public_ip_address = true
 
@@ -27,14 +27,14 @@ resource "aws_instance" "splunk" {
   }
 
   tags = {
-    Name = "splunk_${count.index + 1}"
+    Name = "host_${count.index + 1}"
   }
 
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get update -y",
       "sudo apt-get upgrade -y",
-      "sudo hostnamectl set-hostname splunk-${count.index + 1}"
+      "sudo hostnamectl set-hostname host-${count.index + 1}"
     ]
 
     connection {
