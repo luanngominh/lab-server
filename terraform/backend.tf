@@ -1,9 +1,9 @@
 terraform {
   backend "s3" {
-    bucket = "splunk-state"
+    bucket = "lab-s3-state"
     key    = "tfstate"
     region = "ap-southeast-1"
-    dynamodb_table = "splunk-state"
+    dynamodb_table = "lab-server-locker"
   }
 }
 

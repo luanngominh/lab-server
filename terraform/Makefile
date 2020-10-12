@@ -7,4 +7,4 @@ destroy:
 	terraform destroy -var-file="values.tfvars" -var-file="credentials.tfvars"
 
 init:
-	terraform init
+	terraform init -var-file="values.tfvars" -var-file="credentials.tfvars"
