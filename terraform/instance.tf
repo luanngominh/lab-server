@@ -32,14 +32,13 @@ resource "aws_instance" "host" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo apt-get update -y",
-      "sudo apt-get upgrade -y",
+      "sudo dnf update -y",
       "sudo hostnamectl set-hostname host-${count.index + 1}"
     ]
 
     connection {
       type        = "ssh"
-      user        = "ubuntu"
+      user        = "${var.ec2_user}"
       host        = "${self.public_ip}"
       private_key = "${file(var.ssh_private_key)}"
     }

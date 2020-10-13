@@ -48,3 +48,8 @@ variable "dynamo_table" {
   type = string
   description = "Dynamo table for locking"
 }
+
+variable "ec2_user" {
+  type = string
+  description = "EC2 user"
+}
